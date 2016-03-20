@@ -1,0 +1,72 @@
+{extends file="base.tpl"}
+
+{block name=content}
+{foreach from=$data item=d}
+<center><h2>{$d.title|escape:'htmlall'}</h2></center>
+{/foreach}
+<div id='playerdFxXzXHNSAbE'></div>
+<script type='text/javascript'>
+    jwplayer('playerdFxXzXHNSAbE').setup({
+	{foreach from=$data item=d}
+        playlist: [{
+        image: 'https://mediaportal.fiu.edu/imgs/logo.jpg',
+        sources:[
+        { file: '{$url|escape:'htmlall'}{$d.url|escape:'htmlall'}' },
+        { file: '{$murl|escape:'htmlall'}{$d.url|escape:'htmlall'}/playlist.m3u8' }	
+	]
+        }],
+        {/foreach}
+	width: '100%',
+        autostart: 'true',
+	aspectratio: '16:9'
+	});
+</script><br>
+<div id="bookmarks">
+<center><h1>Bookmarks</h1>
+<script type='text/javascript'>
+{foreach from=$data item=d}
+var b = parseInt("{$d.bookmark|escape:'htmlall'}");
+var bookurl = "{$bookurl|escape:'htmlall'}";
+a=-1;
+for (i = 0;i < b; i++){
+	var bb = i.toString();
+	var bb = bb.substr(bb.length -2);
+	if(bb<60){
+		a++;
+	        var hour = (a/60);
+	        var hour = hour.toString()
+	        var hour = hour.split(".");
+	
+		var url = "{$d.url|escape:'htmlall'}";
+		var url = url.split("mp4:");
+		var url = url[1].split("MPEG-4-HD");
+		if(i<10){
+			var url = bookurl+url[0]+"000"+i+"00.png";
+			var min = a;
+		}
+		else if(i<60 && i>9){
+			var url = bookurl+url[0]+"00"+i+"00.png";
+			var min = a;
+		}
+		else{
+			var url = bookurl+url[0]+"0"+i+"00.png";
+			var min = a-(hour[0]*60);
+		}
+		if(min<10) min="0"+min;
+		var book = hour[0]+":"+min;
+		var div = "<div style=\"float:left\"><center><a href=\"#\" onclick=\"seek("+a+")\"><img width=\"210\"src=\""+url+"\"></a><br>"+book+":00</center></div>";
+		document.write(div);	
+	}
+	else{
+	b++;
+	}
+}
+{/foreach}
+function seek(time){
+time=time*60;
+jwplayer('playerdFxXzXHNSAbE').seek(time);
+}
+</script>
+</center>
+</div>
+{/block}

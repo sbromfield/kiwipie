@@ -8,7 +8,7 @@ class viewvideocontroller
 
 	public function display()
 	{
-		
+		/* if session is not active then go home*/
                 if(!auth::isloggedin())
                 {
                         header("Location: "._ROOT_);
@@ -18,6 +18,7 @@ class viewvideocontroller
                 global $smarty;
                 $user = intval(sessionmanager::get_user_id());
 
+		/*if parameters are empty then go home*/
                 if(!isset($_GET['course']) || !isset($_GET['video']))
                 {
                  	header("Location: "._ROOT_);
@@ -26,14 +27,20 @@ class viewvideocontroller
 
 		$videoid = filter_var($_GET['video'], FILTER_VALIDATE_INT);
 		$courseid = filter_var($_GET['course'], FILTER_VALIDATE_INT);
-
-
+		
+		/*if parameters are of the wrong type then go home*/
 		 if( is_bool($videoid) || is_bool($courseid) )
                 {
                         header("Location: "._ROOT_);
                         return;
                 }
 
+		/*if user isn't in the course, then go home*/
+		if(! user::isingroup($user, $courseid))
+		{
+			header("Location: "._ROOT_);
+                        return;
+		}
 
                 $video = classes::getvideo($courseid, $user, $videoid);
 

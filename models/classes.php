@@ -7,19 +7,6 @@ class classes
         {
 
         }
-/*
-	public static function getcourseid($name)
-	{
-		global $db;
-
-		$sql = "select id from course where name = :name";
-		$st = $db->prepare($sql);
-		$st->execute(array(":name"=>$name));
-		$r = $st->fetchAll();
-		
-		return $r;
-	}
-*/
 
         public static function insertcourses($name, $url)
         {
@@ -65,6 +52,29 @@ class classes
                 return $r;
         }
 
+
+	public static function updatecount($courseid, $count)
+	{
+		global $db;
+
+		$sql = "update course set display = :c where id = :cid";
+		$st = $db->prepare($sql);
+		$r = $st->execute(array(":c" => intval($count), ":cid" => intval($courseid)));
+
+		return $r;
+	}
+
+	public static function getcount($courseid)
+	{
+		global $db;
+
+		$sql = "select display from course where id = :cid";
+		$st = $db->prepare($sql);
+		$st->execute(array("cid"=>intval($courseid)));
+		$r = $st->fetchall();
+
+		return $r[0]["display"];
+	}
 
 	public static function hidevideo($videoid, $courseid)
 	{
@@ -144,7 +154,8 @@ class classes
 		$sql = "select display from course where id = :id";
 		$st = $db->prepare($sql);
 		$st->execute(array(":id" => intval($courseid)));
-		return $st->fetchAll();
+		$r = $st->fetchAll();
+		return intval($r[0]['display']);
 	}		
 
 
@@ -152,10 +163,23 @@ class classes
 	{
 		global $db;
 	
-		$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid";
-		$st =$db->prepare($sql);
-		$st->execute(array(":courseid"=> intval($courseid)) );
+		$count = classes::howmanyclassestodisplay($courseid);
+		$cid = intval($courseid);
 	
+		if($count == -1)
+		{
+			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid";
+			$st =$db->prepare($sql);
+			$st->execute(array(":courseid"=> intval($courseid)) );
+		}else
+		{
+			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid limit :c";
+			$st =$db->prepare($sql);
+			$st->bindParam(':c', $count, PDO::PARAM_INT);
+			$st->bindParam(':courseid', $cid, PDO::PARAM_INT);
+			$st->execute();
+		}
+
 		return $st->fetchAll();
 	}
 
@@ -164,7 +188,7 @@ class classes
 	public static function getallclass($courseid, $pid)
         {
                 global $db;
-
+		
                 $sql = "select distinct id, url, title, hide from class where courseid = :courseid";
                 $st =$db->prepare($sql);
                 $st->execute(array(":courseid"=> intval($courseid)) );

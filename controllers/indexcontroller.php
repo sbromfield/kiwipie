@@ -1,14 +1,12 @@
 <?php
 class indexcontroller
 {
-
 	
-	function __construct()
+	public function __construct()
 	{
-		//var_dump($_POST);
 	}
 
-	function display()
+	public function display()
 	{
 		global $smarty;
 
@@ -16,28 +14,21 @@ class indexcontroller
 
 		if(auth::isloggedin())
 		{
-			//die(var_dump($_POST));
 			user::register();
 			$sid = sessionmanager::get_user_id();
 			$id = user::getuserid( $sid);
 			$cid = classes::getcourseid($_SESSION['courseid']);
 
-			$r =  groups::getgroups(intval($id));
 			if(!auth::isadmin())
 			{
 				$linkdata =classes::getclass($cid,$id);
-				$smarty->assign("user", $r);
 				$smarty->assign("data", $linkdata);
 				$smarty->assign("courseid", $cid);
 				$smarty->display("index.tpl");
 			}else
 			{
-				if(!empty($_POST['rss']))
-				{
-					//
-				}
-
 				$rss = classes::getrsslink($cid);
+				$count = classes::getcount($cid);
 
                                 if( is_bool($rss) || is_null($rss) ) 
                                 {
@@ -48,9 +39,9 @@ class indexcontroller
 				$linkdata =classes::getallclass($cid,$id);
                                 
 				$smarty->assign("rss", $rss);
-				$smarty->assign("user", $r);
 				$smarty->assign("data", $linkdata);
 				$smarty->assign("courseid", $cid);
+				$smarty->assign("count", $count);
                                 $smarty->display("admin.tpl");
 			}
 		}else
@@ -59,5 +50,6 @@ class indexcontroller
 		}
 	}
 }
+
 ?>
 

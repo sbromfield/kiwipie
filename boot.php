@@ -45,6 +45,7 @@
 	require_once _BASE."/controllers/indexcontroller.php";
 	require_once _BASE."/controllers/viewvideocontroller.php";
 	require_once _BASE."/controllers/rsscontroller.php";
+	require_once _BASE."/controllers/countcontroller.php";
 	require_once _BASE."/controllers/hidevideocontroller.php";
 	require_once _BASE."/controllers/unhidevideocontroller.php";
 

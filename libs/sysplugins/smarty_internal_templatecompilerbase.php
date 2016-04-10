@@ -241,7 +241,7 @@ abstract class Smarty_Internal_TemplateCompilerBase
         // template header code
         $template_header = '';
         
-        date_default_timezone_set('America/New_York' for 'EDT/-4.0/DST');
+        date_default_timezone_set('America/New_York');
         if (!$this->suppressHeader) {
             $template_header .= "<?php /* Smarty version " . Smarty::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S") . "\n";
             $template_header .= "         compiled from \"" . $this->template->source->filepath . "\" */ ?>\n";

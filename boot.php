@@ -30,6 +30,7 @@
 	define("_MNETURL", "");
 	//url where all bookmarks are
 	define("_BOOKURL", "");
+	define("_MEDIAURL","");
 	//requires
 	require_once __smartypath__."/smarty.class.php";
 	require_once __smartypath__."/lastRss.php";

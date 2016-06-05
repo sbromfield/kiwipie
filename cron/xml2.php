@@ -23,7 +23,7 @@ for($i = $len ; $i > -1; $i--)
 {
 	$items = "https:".substr($result['items'][$i]['link'], 6);
 	$strip = explode("info=",$items);
-	$classes = rawurldecode("https://coursecapture.fiu.edu/CrestronMediaPlayer/".trim($strip[1]));	
+	$classes = rawurldecode(_MEDIAURL.trim($strip[1]));	
 
 	$classtitle = $result['items'][$i]['title'];
 	

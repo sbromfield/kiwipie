@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `class`;
 CREATE TABLE `class` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` text,
+  `date` date,
   `courseid` int(11) NOT NULL,
   `bookmark` int(11) DEFAULT NULL,
   `title` text,

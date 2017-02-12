@@ -5,5 +5,6 @@ Php
 Mysql
 Wowza server
 Crestron Roomview Fusion
+apache (running https)
 
 For a how-to on installing kiwipie, look at the wiki.

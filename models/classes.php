@@ -136,13 +136,14 @@ class classes
 
 
 
-	public static function insertclass($url, $title, $courseid, $bookmark)
+	public static function insertclass($url, $title, $courseid, $bookmark, $date = null)
         {
                 global $db;
 
-                $sql = "insert into class(url,title,courseid,bookmark) values(:url,:title,:courseid,:bookmark)";
+                $sql = "insert into class(url,title,courseid,bookmark, date) values(:url,:title,:courseid,:bookmark, :date)";
                 $st = $db->prepare($sql);
-                $r = $st->execute(array(":url"=>$url, ":title"=> $title, ":courseid"=> $courseid, "bookmark"=> $bookmark));
+                $r = $st->execute(array(":url"=>$url, ":title"=> $title, ":courseid"=> $courseid, ":bookmark"=> $bookmark
+                , ":date" => $date));
                 return $r;
         }
 
@@ -168,12 +169,12 @@ class classes
 	
 		if($count == -1)
 		{
-			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid";
+			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid order by date desc";
 			$st =$db->prepare($sql);
 			$st->execute(array(":courseid"=> intval($courseid)) );
 		}else
 		{
-			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid limit :c";
+			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid limit :c by date desc";
 			$st =$db->prepare($sql);
 			$st->bindParam(':c', $count, PDO::PARAM_INT);
 			$st->bindParam(':courseid', $cid, PDO::PARAM_INT);
@@ -189,7 +190,7 @@ class classes
         {
                 global $db;
 		
-                $sql = "select distinct id, url, title, hide from class where courseid = :courseid";
+                $sql = "select distinct id, url, title, hide from class where courseid = :courseid order by date desc";
                 $st =$db->prepare($sql);
                 $st->execute(array(":courseid"=> intval($courseid)) );
 

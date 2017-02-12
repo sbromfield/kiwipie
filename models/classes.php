@@ -174,7 +174,7 @@ class classes
 			$st->execute(array(":courseid"=> intval($courseid)) );
 		}else
 		{
-			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid limit :c by date desc";
+			$sql = "select distinct id, url, title from class where hide <> 1 and courseid = :courseid order by date desc limit :c ";
 			$st =$db->prepare($sql);
 			$st->bindParam(':c', $count, PDO::PARAM_INT);
 			$st->bindParam(':courseid', $cid, PDO::PARAM_INT);
